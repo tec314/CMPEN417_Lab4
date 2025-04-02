@@ -1,7 +1,6 @@
 #include "fpga417_lab4.h"
 #include <stdio.h>
 
-#define LENGTH 8
 
 void fpga417_fir(int *data, int *filter) {
     int filter_coeff[3];
@@ -15,25 +14,21 @@ void fpga417_fir(int *data, int *filter) {
     	fir(data[i], filter_coeff, &temp);
     	if (i>1 ){
     		data[i-2]=temp;
-    		printf("%d \n",temp);
+
     	}
     }
 
 }
 
 void fir(int input, int filter[3],int*output){
-	static int delay_line[3] = {0};  // Storage for previous inputs
+	static int delay_line[3] = {0};  //Keep delay results throughout iterations
 	    int result = 0;
 
-	    // Shift old values in delay line
-	    delay_line[2] = delay_line[1];
-	    delay_line[1] = delay_line[0];
-	    delay_line[0] = input;
+	    delay_line[2]=delay_line[1]; //Shift the delay registers
+	    delay_line[1]=delay_line[0];
+	    delay_line[0]=input;
 
-	    // Calculate the filtered output
-	    result = (delay_line[0] * filter[0]) +
-	             (delay_line[1] * filter[1]) +
-	             (delay_line[2] * filter[2]);
+	    result = (delay_line[0]*filter[0])+(delay_line[1] * filter[1])+(delay_line[2]*filter[2]);
 
-	    *output = result;
+	    *output = result;//Write the output to the data
 }
