@@ -3,32 +3,16 @@
 
 
 void fpga417_fir(int *data, int *filter) {
-    int filter_coeff[3];
-    int temp;
+	int temp[LENGTH+2]={0};
+	int result;
+	for (int h = 2; h < LENGTH; h++){
+		temp[h]=data[h];
+	}
+	for (int i = 2; i < LENGTH+2; i++) {
+	        result = (temp[i] * filter[0]) + (temp[i-1] * filter[1]) +  (temp[i-2] * filter[2]);
+	        data[i-2] = result;
+	    }
 
-    for (int h = 0; h < 3; h++) {
-            filter_coeff[h] = filter[h];
-        }
-
-    for (int i = 0; i < LENGTH+2; i++) {
-    	fir(data[i], filter_coeff, &temp);
-    	if (i>1 ){
-    		data[i-2]=temp;
-
-    	}
-    }
 
 }
 
-void fir(int input, int filter[3],int*output){
-	static int delay_line[3] = {0};  //Keep delay results throughout iterations
-	    int result = 0;
-
-	    delay_line[2]=delay_line[1]; //Shift the delay registers
-	    delay_line[1]=delay_line[0];
-	    delay_line[0]=input;
-
-	    result = (delay_line[0]*filter[0])+(delay_line[1] * filter[1])+(delay_line[2]*filter[2]);
-
-	    *output = result;//Write the output to the data
-}

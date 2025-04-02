@@ -5,6 +5,4 @@
 
 void fpga417_fir(int *data, int *filter);
 
-void fir(int input, int filter[3], int* output);
-
 #endif
